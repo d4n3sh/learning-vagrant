@@ -1,0 +1,54 @@
+#Build in serial
+ENV["VAGRANT_NO_PARALLEL"] = "yes"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+
+  #Load Balancer
+  
+  LBCount = 1
+
+  (1..LBCount).each do |i|
+    config.vm.define "loadbalancer#{i}" do |server|
+      server.vm.hostname = "loadbalancer#{i}"
+      server.vm.network "private_network", ip: "192.168.10.10#{i}"
+      server.vm.provider "virtualbox" do |vbox|
+        vbox.name = "loadbalancer#{i}"
+        vbox.cpus=1
+        vbox.memory=1024
+      end
+    end
+  end
+  
+  #Control-plane
+
+  ControlCount = 1
+  
+  (1..ControlCount).each do |i|
+    config.vm.define "control#{i}" do |server|
+      server.vm.hostname = "control#{i}"
+      server.vm.network "private_network", ip: "192.168.10.11#{i}"
+      server.vm.provider "virtualbox" do |vbox|
+        vbox.name = "control#{i}"
+        vbox.cpus=2
+        vbox.memory=2048
+      end
+    end
+  end
+
+  #Workers
+
+  WorkersCount = 3
+  
+  (1..WorkersCount).each do |i|
+    config.vm.define "worker#{i}" do |server|
+      server.vm.hostname = "worker#{i}"
+      server.vm.network "private_network", ip: "192.168.10.12#{i}"
+      server.vm.provider "virtualbox" do |vbox|
+        vbox.name = "worker#{i}"
+        vbox.cpus=1
+        vbox.memory=1024
+      end
+    end
+  end
+end
