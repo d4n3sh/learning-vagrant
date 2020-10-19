@@ -1,0 +1,1 @@
+The `ansible` provisioner will run ansible from the vagrant host(the machine you are running vagrant on).
