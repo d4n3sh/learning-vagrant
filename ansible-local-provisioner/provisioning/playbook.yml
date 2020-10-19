@@ -1,0 +1,10 @@
+---
+- hosts: all
+  tasks:
+    - name: ensure httpd is at the latest version
+      yum: pkg=httpd state=latest
+      notify:
+      - restart httpd
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=restarted

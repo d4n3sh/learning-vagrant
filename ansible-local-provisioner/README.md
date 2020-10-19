@@ -1,0 +1,1 @@
+The `ansible_local` provisioner will run ansible inside the vagrant guest instance.
